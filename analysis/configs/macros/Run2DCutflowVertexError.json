@@ -114,6 +114,48 @@
                     "nbinsY": 100,
                     "lowY": 0,
                     "highY": 10
+                },
+		{
+                    "name": "matched_muon_vtx_reduced_chi2_vs_matched_muon_vtx_vxy",
+                    "title": "Muon pair vertex reduced chi^2 vs Muon pair vertex vxy [cm]",
+                    "groups_to_exclude": [],
+                    "type": "float2D",
+                    "quantity": "matched_muon_vtx_reduced_chi2",
+                    "nbinsX": 100,
+                    "lowX": 0,
+                    "highX": 100,
+                    "quantity2": "matched_muon_vtx_vxy",
+                    "nbinsY": 100,
+                    "lowY": 0,
+                    "highY": 10
+                },
+		{
+                    "name": "reco_dsa0_trk_chi2_vs_matched_muon_vtx_vxy",
+                    "title": "leading muon trk chi2 vs Muon pair vertex vxy [cm]",
+                    "groups_to_exclude": [],
+                    "type": "float2D",
+                    "quantity": "reco_dsa0_trk_chi2",
+                    "nbinsX": 100,
+                    "lowX": 0,
+                    "highX": 100,
+                    "quantity2": "matched_muon_vtx_vxy",
+                    "nbinsY": 100,
+                    "lowY": 0,
+                    "highY": 10
+		},
+		{
+                    "name": "reco_sel_mu_dxy0_vs_matched_muon_vtx_vxy",
+                    "title": " reco sel mu dxy0  vs Muon pair vertex vxy [cm]",
+                    "groups_to_exclude": [],
+                    "type": "float2D",
+                    "quantity": "reco_sel_mu_dxy0",
+                    "nbinsX": 100,
+                    "lowX": 0,
+                    "highX": 100,
+                    "quantity2": "matched_muon_vtx_vxy",
+                    "nbinsY": 100,
+                    "lowY": 0,
+                    "highY": 10
                 }
             ]
         }
