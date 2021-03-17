@@ -264,20 +264,23 @@
         "nbinsY": 10,
         "lowY": 0,
         "highY": 2.5
-    }
-
-]
-
-
-
-
-
-
-
-
-
+    },
     {
-        "name": "matched_muon_vtx_vxy_vs_Unmatched_dsa_dxy",
+        "name": "matched_muon_vtx_vxy_vs_Matched_dsa_dxy",
+        "title": " Muon pair vertex vxy [cm] vs Matched dSA |dxy|",
+        "groups_to_exclude": [],
+        "type": "vec_float2D",
+        "quantity": "matched_muon_vtx_vxy_RVec_m",
+        "nbinsX": 60,
+        "lowX": 0,
+        "highX": 600,
+        "quantity2": "matched_dsa_dxy",
+        "nbinsY": 30,
+        "lowY": 0,
+        "highY": 30
+    },
+    {
+        "name": "matched_muon_vtx_vxy_vs_unmatched_dsa_dxy",
         "title": " Muon pair vertex vxy [cm] vs Unmatched dSA |dxy|",
         "groups_to_exclude": [],
         "type": "vec_float2D",
@@ -289,7 +292,10 @@
         "nbinsY": 30,
         "lowY": 0,
         "highY": 30
-    },
+    }
+]
+
+
     {
         "name": "matched_muon_vtx_vxy_vs_unmatched_dsa_dxy_zoom",
         "title": " Muon pair vertex vxy [cm] vs Unmatched dSA |dxy|",
@@ -303,7 +309,9 @@
         "nbinsY": 30,
         "lowY": 0,
         "highY": 3
-    },
+    }
+
+,
     {
         "name": "matched_muon_vtx_vxy_vs_unmatched_gm_dxy_err",
         "title": " Muon pair vertex vxy [cm] vs Unmatched dSA |dxy| err [cm] ",

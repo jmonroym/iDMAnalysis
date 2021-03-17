@@ -497,27 +497,17 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
     };
 
     auto takeMatchedVtxQuantity = [&](RVec<float> quant_dsadsa, RVec<float> quant_gmgm, RVec<float> quant_dsagm, size_t best_muon_0, size_t best_muon_1) {
-        cout <<"MatchedVtxQ"<< endl;
-        if (quant_dsadsa.size() == 0){ 
-	   cout <<"quant_dsadsa.size() == 0"<< endl;
-	   return -9999.f;}
+        if (quant_dsadsa.size() == 0) return -9999.f;
         float final_quant;
-        cout <<"fq1 "<< final_quant<< endl;
         // Check for each best muon to see if it's gm (offset by 4) or dsa
-        if (best_muon_0 > 3 && best_muon_1 > 3){
+        if (best_muon_0 > 3 && best_muon_1 > 3)
             final_quant = quant_gmgm[4 * (best_muon_0-4) + (best_muon_1-4)]; 
-	    cout<<"fq2 "<< final_quant<< endl;}
-        else if (best_muon_0 > 3){
+        else if (best_muon_0 > 3)
             final_quant = quant_dsagm[4 * (best_muon_1) + (best_muon_0-4)];
-	    cout <<"fq3 "<< final_quant<< endl;}
-        else if (best_muon_1 > 3){
+        else if (best_muon_1 > 3)
             final_quant = quant_dsagm[4 * (best_muon_0) + (best_muon_1-4)];
-	    cout <<"fq4 "<< final_quant<< endl;}
-        else{
+        else
             final_quant = quant_dsadsa[4 * best_muon_0 + best_muon_1];
-	    cout <<"fq5 "<< final_quant<< endl;}
-
-	cout << "final_quant Matched Vtx Quantity: " << final_quant<< endl;
         return final_quant;
     };
 
