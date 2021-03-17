@@ -497,17 +497,27 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
     };
 
     auto takeMatchedVtxQuantity = [&](RVec<float> quant_dsadsa, RVec<float> quant_gmgm, RVec<float> quant_dsagm, size_t best_muon_0, size_t best_muon_1) {
-        if (quant_dsadsa.size() == 0) return -9999.f;
+        cout <<"MatchedVtxQ"<< endl;
+        if (quant_dsadsa.size() == 0){ 
+	   cout <<"quant_dsadsa.size() == 0"<< endl;
+	   return -9999.f;}
         float final_quant;
+        cout <<"fq1 "<< final_quant<< endl;
         // Check for each best muon to see if it's gm (offset by 4) or dsa
-        if (best_muon_0 > 3 && best_muon_1 > 3)
-            final_quant = quant_gmgm[4 * (best_muon_0-4) + (best_muon_1-4)];
-        else if (best_muon_0 > 3)
+        if (best_muon_0 > 3 && best_muon_1 > 3){
+            final_quant = quant_gmgm[4 * (best_muon_0-4) + (best_muon_1-4)]; 
+	    cout<<"fq2 "<< final_quant<< endl;}
+        else if (best_muon_0 > 3){
             final_quant = quant_dsagm[4 * (best_muon_1) + (best_muon_0-4)];
-        else if (best_muon_1 > 3)
+	    cout <<"fq3 "<< final_quant<< endl;}
+        else if (best_muon_1 > 3){
             final_quant = quant_dsagm[4 * (best_muon_0) + (best_muon_1-4)];
-        else
+	    cout <<"fq4 "<< final_quant<< endl;}
+        else{
             final_quant = quant_dsadsa[4 * best_muon_0 + best_muon_1];
+	    cout <<"fq5 "<< final_quant<< endl;}
+
+	cout << "final_quant Matched Vtx Quantity: " << final_quant<< endl;
         return final_quant;
     };
 
@@ -564,6 +574,7 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
             unmatched.push_back(quant_dsa[dsa_index_0]);
         if (dsa_index_1 == best_muon_1)
             unmatched.push_back(quant_dsa[dsa_index_1]);
+	cout << "# of Unmatched dSA muons: "<< unmatched.size() << endl;
         return unmatched;
     };
 
@@ -574,6 +585,7 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
             matched.push_back(quant_dsa[dsa_index_0]);
         if (dsa_index_1 != best_muon_1)
             matched.push_back(quant_dsa[dsa_index_1]);
+	cout  <<"# of Matched dSA muons: "<< matched.size() << endl;
         return matched;
     };
     auto takeMatchedGMQuantityFloat = [&](RVec<float> quant_gm, size_t dsa_index_0, size_t best_muon_0, size_t dsa_index_1, size_t best_muon_1) {
@@ -583,7 +595,13 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
             matched.push_back(quant_gm[best_muon_0-4]);
         if (dsa_index_1 != best_muon_1 && best_muon_1 > 3)
             matched.push_back(quant_gm[best_muon_1-4]);
+	cout <<"# of Matched GM muons: "<< matched.size() << endl;
         return matched;
+    };
+
+    auto FromScalarToRVec = [&](float quantity, int len) {
+      cout << "from scalar to Rvec(Quantity, len) " << quantity << " , "<< len << endl; 
+      return RVec<float>(len, quantity);
     };
 
     auto calcMatchedMuonMT = [&](float muon_pt, float muon_phi, float MET_pt, float MET_phi) {
@@ -660,10 +678,26 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
         Define("matched_dsa_dxy_err", takeMatchedDSAQuantityFloat, {"reco_dsa_dxy_err", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
         Define("matched_gm_dxy_err", takeMatchedGMQuantityFloat, {"reco_gm_dxy_err", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
         Define("unmatched_dsa_dxy_err", takeUnmatchedDSAQuantityFloat, {"reco_dsa_dxy_err", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+
+        // added by jmonroy //
+        Define("n_unmatched", "2 - n_matched"). 
+        Define("matched_gm_dz", takeMatchedGMQuantityFloat, {"reco_gm_dz", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+        Define("matched_gm_trk_chi2", takeMatchedGMQuantityFloat, {"reco_gm_trk_chi2", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+        Define("matched_gm_trk_n_hits", takeMatchedGMQuantityFloat, {"reco_gm_trk_n_hits", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+        Define("matched_gm_trk_n_planes", takeMatchedGMQuantityFloat, {"reco_gm_trk_n_planes", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+        Define("unmatched_dsa_pt", takeUnmatchedDSAQuantityFloat, {"reco_dsa_pt", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+        Define("unmatched_dsa_dz", takeUnmatchedDSAQuantityFloat, {"reco_dsa_dz", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+        Define("unmatched_dsa_trk_chi2", takeUnmatchedDSAQuantityFloat, {"reco_dsa_trk_chi2", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+        Define("unmatched_dsa_trk_n_hits", takeUnmatchedDSAQuantityFloat, {"reco_dsa_trk_n_hits", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+        Define("unmatched_dsa_trk_n_planes", takeUnmatchedDSAQuantityFloat, {"reco_dsa_trk_n_planes", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
+        // 
+
         Define("matched_dsa_dxy_res", "matched_dsa_dxy_err/matched_dsa_dxy").
         Define("matched_gm_dxy_res", "matched_gm_dxy_err/matched_gm_dxy").
         Define("unmatched_dsa_dxy_res", "unmatched_dsa_dxy_err/unmatched_dsa_dxy").
-        Define("matched_muon_vtx_vxy", takeMatchedVtxQuantity, {"reco_vtx_dsadsa_vxy", "reco_vtx_gmgm_vxy", "reco_vtx_dsagm_vxy", "best_muon_0", "best_muon_1"}).
+        Define("matched_muon_vtx_vxy", takeMatchedVtxQuantity, {"reco_vtx_dsadsa_vxy", "reco_vtx_gmgm_vxy", "reco_vtx_dsagm_vxy", "best_muon_0", "best_muon_1"}).      
+        Define("matched_muon_vtx_vxy_RVec_m", FromScalarToRVec, {"matched_muon_vtx_vxy", "n_matched"}). // workaround for RDF not supporting scalar vs RVec 2D plots
+        Define("matched_muon_vtx_vxy_RVec_unm", FromScalarToRVec, {"matched_muon_vtx_vxy", "n_unmatched"}). // workaround for RDF not supporting scalar vs RVec 2D plots
         Define("matched_muon_vtx_vz", takeMatchedVtxQuantity, {"reco_vtx_dsadsa_vz", "reco_vtx_gmgm_vz", "reco_vtx_dsagm_vz", "best_muon_0", "best_muon_1"}).
         Define("matched_muon_vtx_sigmavxy", takeMatchedVtxQuantity, {"reco_vtx_dsadsa_sigmavxy", "reco_vtx_gmgm_sigmavxy", "reco_vtx_dsagm_sigmavxy", "best_muon_0", "best_muon_1"}).
         Define("matched_muon_vtx_reduced_chi2", takeMatchedVtxQuantity, {"reco_vtx_dsadsa_reduced_chi2", "reco_vtx_gmgm_reduced_chi2", "reco_vtx_dsagm_reduced_chi2", "best_muon_0", "best_muon_1"}).
@@ -814,12 +848,15 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
                     all_histos_1D_[histo_name][cut] = df_filters.Histo1D<int,double>({Form("%s_cut%d_%s", histo_name.Data(), cut, group_.Data()), common::group_plot_info[group_].legend, histo_info->nbinsX, bin_edges}, histo_info->quantity.Data(), "wgt");
                 }
                 else // just number of bins and low and high X
-                    all_histos_1D_[histo_name][cut] = df_filters.Histo1D<int,double>({Form("%s_cut%d_%s", histo_name.Data(), cut, group_.Data()), common::group_plot_info[group_].legend, histo_info->nbinsX, histo_info->lowX, histo_info->highX}, histo_info->quantity.Data(), "wgt");
+		  all_histos_1D_[histo_name][cut] = df_filters.Histo1D<int,double>({Form("%s_cut%d_%s", histo_name.Data(), cut, group_.Data()), common::group_plot_info[group_].legend, histo_info->nbinsX, histo_info->lowX, histo_info->highX}, histo_info->quantity.Data(), "wgt");
             }
             else if (histo_info->type == "float2D") 
-                all_histos_2D_[histo_name][cut] = df_filters.Histo2D<float,float,double>({Form("%s_cut%d_%s", histo_name.Data(), cut, group_.Data()), common::group_plot_info[group_].legend, histo_info->nbinsX, histo_info->lowX, histo_info->highX, histo_info->nbinsY, histo_info->lowY, histo_info->highY}, histo_info->quantity.Data(), histo_info->quantity2.Data(), "wgt");
-            else if (histo_info->type == "int2D")
-                all_histos_2D_[histo_name][cut] = df_filters.Histo2D<int,int,double>({Form("%s_cut%d_%s", histo_name.Data(), cut, group_.Data()), common::group_plot_info[group_].legend, histo_info->nbinsX, histo_info->lowX, histo_info->highX, histo_info->nbinsY, histo_info->lowY, histo_info->highY}, histo_info->quantity.Data(), histo_info->quantity2.Data(), "wgt");
+	      all_histos_2D_[histo_name][cut] = df_filters.Histo2D<float,float,double>({Form("%s_cut%d_%s", histo_name.Data(), cut, group_.Data()), common::group_plot_info[group_].legend, histo_info->nbinsX, histo_info->lowX, histo_info->highX, histo_info->nbinsY, histo_info->lowY, histo_info->highY}, histo_info->quantity.Data(), histo_info->quantity2.Data(), "wgt");
+           
+	    else if (histo_info->type == "vec_float2D")
+	      all_histos_2D_[histo_name][cut] = df_filters.Histo2D<RVec<float>,RVec<float>,double>({Form("%s_cut%d_%s", histo_name.Data(), cut, group_.Data()), common::group_plot_info[group_].legend, histo_info->nbinsX, histo_info->lowX, histo_info->highX, histo_info->nbinsY, histo_info->lowY, histo_info->highY}, histo_info->quantity.Data(), histo_info->quantity2.Data(), "wgt");
+	    else if (histo_info->type == "int2D")
+	      all_histos_2D_[histo_name][cut] = df_filters.Histo2D<int,int,double>({Form("%s_cut%d_%s", histo_name.Data(), cut, group_.Data()), common::group_plot_info[group_].legend, histo_info->nbinsX, histo_info->lowX, histo_info->highX, histo_info->nbinsY, histo_info->lowY, histo_info->highY}, histo_info->quantity.Data(), histo_info->quantity2.Data(), "wgt");
             else
                 cout << "Hist type not recognized!" << endl;
         }
