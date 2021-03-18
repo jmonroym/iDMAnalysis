@@ -564,7 +564,7 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
             unmatched.push_back(quant_dsa[dsa_index_0]);
         if (dsa_index_1 == best_muon_1)
             unmatched.push_back(quant_dsa[dsa_index_1]);
-	cout << "# of Unmatched dSA muons: "<< unmatched.size() << endl;
+	//cout << "# of Unmatched dSA muons: "<< unmatched.size() << endl;
         return unmatched;
     };
 
@@ -575,7 +575,7 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
             matched.push_back(quant_dsa[dsa_index_0]);
         if (dsa_index_1 != best_muon_1)
             matched.push_back(quant_dsa[dsa_index_1]);
-	cout  <<"# of Matched dSA muons: "<< matched.size() << endl;
+	//cout  <<"# of Matched dSA muons: "<< matched.size() << endl;
         return matched;
     };
     auto takeMatchedGMQuantityFloat = [&](RVec<float> quant_gm, size_t dsa_index_0, size_t best_muon_0, size_t dsa_index_1, size_t best_muon_1) {
@@ -585,12 +585,12 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
             matched.push_back(quant_gm[best_muon_0-4]);
         if (dsa_index_1 != best_muon_1 && best_muon_1 > 3)
             matched.push_back(quant_gm[best_muon_1-4]);
-	cout <<"# of Matched GM muons: "<< matched.size() << endl;
+	//cout <<"# of Matched GM muons: "<< matched.size() << endl;
         return matched;
     };
 
     auto FromScalarToRVec = [&](float quantity, int len) {
-      cout << "from scalar to Rvec(Quantity, len) " << quantity << " , "<< len << endl; 
+      //cout << "from scalar to Rvec(Quantity, len) " << quantity << " , "<< len << endl; 
       return RVec<float>(len, quantity);
     };
 
@@ -670,7 +670,7 @@ Bool_t RDFAnalysis::Process(TChain * chain) {
         Define("unmatched_dsa_dxy_err", takeUnmatchedDSAQuantityFloat, {"reco_dsa_dxy_err", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
 
         // added by jmonroy //
-        Define("n_unmatched", "2 - n_matched"). 
+        Define("n_unmatched", "(int)unmatched_dsa_dxy.size()"). 
         Define("matched_gm_dz", takeMatchedGMQuantityFloat, {"reco_gm_dz", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
         Define("matched_gm_trk_chi2", takeMatchedGMQuantityFloat, {"reco_gm_trk_chi2", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
         Define("matched_gm_trk_n_hits", takeMatchedGMQuantityFloat, {"reco_gm_trk_n_hits", "best_dsa_0", "best_muon_0", "best_dsa_1", "best_muon_1"}).
